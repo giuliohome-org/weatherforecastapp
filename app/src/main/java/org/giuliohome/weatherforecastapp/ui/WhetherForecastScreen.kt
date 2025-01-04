@@ -44,6 +44,8 @@ fun parseForecast(forecast: String): Forecast {
 
 @Composable
 fun WeatherForecastScreen(modifier: Modifier = Modifier) {
+    var city by remember { mutableStateOf("") }
+    var country by remember { mutableStateOf("") }
     var forecastList by remember { mutableStateOf<List<Forecast>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -51,19 +53,39 @@ fun WeatherForecastScreen(modifier: Modifier = Modifier) {
     // Coroutine to fetch data
     LaunchedEffect(isLoading) {
         if (isLoading) {
-            try {
-                errorMessage = null
-                val response = RetrofitClient.weatherApi.getForecast()
-                forecastList = response.map { parseForecast(it) }
-            } catch (e: Exception) {
-                errorMessage = "Error fetching data"
-            } finally {
+            if (city.isNotBlank() && country.isNotBlank()) {
+                try {
+                    errorMessage = null
+                    val response = RetrofitClient.weatherApi.getForecast(city, country)
+                    forecastList = response.map { parseForecast(it) }
+                } catch (e: Exception) {
+                    errorMessage = "Error fetching data"
+                } finally {
+                    isLoading = false
+                }
+            } else {
+                errorMessage = "Please enter both city and country"
                 isLoading = false
             }
         }
     }
 
     Column(modifier = modifier) {
+        // Input fields for city and country
+        OutlinedTextField(
+            value = city,
+            onValueChange = { city = it },
+            label = { Text("City") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            value = country,
+            onValueChange = { country = it },
+            label = { Text("Country") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = { isLoading = true }) {
             Text("Refresh")
         }

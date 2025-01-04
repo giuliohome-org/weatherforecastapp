@@ -1,9 +1,15 @@
 package org.giuliohome.weatherforecastapp
 
+import retrofit2.http.Path
 import retrofit2.http.GET
 
+
 interface WeatherApi {
-    @GET("forecast/rome,italy")
-    suspend fun getForecast(): List<String>
+    @GET("forecast/{city},{country}")
+    suspend fun getForecast(
+        @Path("city") city: String,
+        @Path("country") country: String
+    ) : List<String>
 
 }
+
