@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "org.giuliohome.weatherforecastapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "org.giuliohome.weatherforecastapp"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.datastore.preferences)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

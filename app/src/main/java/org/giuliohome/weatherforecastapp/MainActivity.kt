@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 // Content setup with Scaffold
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     // Fetch and display forecast
-                    WeatherForecastScreen(modifier = Modifier.padding(innerPadding))
+                    WeatherForecastScreen(context = this,modifier = Modifier.padding(innerPadding))
                 }
             }
         }

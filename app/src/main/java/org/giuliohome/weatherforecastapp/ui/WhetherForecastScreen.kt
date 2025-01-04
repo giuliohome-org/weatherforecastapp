@@ -1,5 +1,6 @@
 package org.giuliohome.weatherforecastapp.ui
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.giuliohome.weatherforecastapp.Forecast
 import org.giuliohome.weatherforecastapp.RetrofitClient
-
+import org.giuliohome.weatherforecastapp.WeatherPreferences
 
 
 // Parse forecast response
@@ -43,12 +44,19 @@ fun parseForecast(forecast: String): Forecast {
 }
 
 @Composable
-fun WeatherForecastScreen(modifier: Modifier = Modifier) {
+fun WeatherForecastScreen(context: Context, modifier: Modifier = Modifier) {
     var city by remember { mutableStateOf("") }
     var country by remember { mutableStateOf("") }
     var forecastList by remember { mutableStateOf<List<Forecast>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    // Load saved city and country on first launch
+    LaunchedEffect(Unit) {
+        val (savedCity, savedCountry) = WeatherPreferences.getCityAndCountry(context)
+        city = savedCity
+        country = savedCountry
+    }
 
     // Coroutine to fetch data
     LaunchedEffect(isLoading) {
@@ -58,6 +66,7 @@ fun WeatherForecastScreen(modifier: Modifier = Modifier) {
                     errorMessage = null
                     val response = RetrofitClient.weatherApi.getForecast(city, country)
                     forecastList = response.map { parseForecast(it) }
+                    WeatherPreferences.saveCityAndCountry(context, city, country)
                 } catch (e: Exception) {
                     errorMessage = "Error fetching data"
                 } finally {
