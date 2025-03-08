@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -43,12 +42,12 @@ fun ForecastItem(forecast: Forecast) {
                     text = forecast.date,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = Color.Blue
                 )
                 Text(
                     text = forecast.description,
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
+                    color = Color.Magenta
                 )
             }
 

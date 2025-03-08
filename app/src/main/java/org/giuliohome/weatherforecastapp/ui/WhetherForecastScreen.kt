@@ -20,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -45,17 +46,20 @@ fun parseForecast(forecast: String): Forecast {
 
 @Composable
 fun WeatherForecastScreen(context: Context, modifier: Modifier = Modifier) {
-    var city by remember { mutableStateOf("") }
-    var country by remember { mutableStateOf("") }
-    var forecastList by remember { mutableStateOf<List<Forecast>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var city by rememberSaveable { mutableStateOf("") }
+    var country by rememberSaveable { mutableStateOf("") }
+    var forecastList by rememberSaveable { mutableStateOf<List<Forecast>>(emptyList()) }
+    var isLoading by rememberSaveable { mutableStateOf(true) }
+    var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
 
     // Load saved city and country on first launch
     LaunchedEffect(Unit) {
         val (savedCity, savedCountry) = WeatherPreferences.getCityAndCountry(context)
         city = savedCity
         country = savedCountry
+        if (city.isNotBlank() && country.isNotBlank()) {
+            isLoading = true
+        }
     }
 
     // Coroutine to fetch data
